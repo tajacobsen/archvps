@@ -21,7 +21,7 @@ EOF
 }
 
 setup_sshd() {
-    sed -i 's/#PermitRootLogin no/PermitRootLogin no/g' /etc/ssh/sshd_config
+    sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
     systemctl restart sshd
 }
 
