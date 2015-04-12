@@ -3,13 +3,25 @@
 MINIMAL=('vim-minimal' 'sudo' 'iptables')
 
 setup_iptables() {
-    echo "TODO: Write iptables.rules"
+    [ -f /etc/iptables/iptables.rules ] && cp /etc/iptables/iptables.rules{,.backup}
+
+cat <<EOF > /etc/iptables/iptables.rules
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+COMMIT
+EOF
     systemctl enable iptables
     systemctl start iptables
 }
 
 setup_sshd() {
-    echo "TODO: disable ssh rootlogin"
+    sed -i 's/#PermitRootLogin no/PermitRootLogin no/g' /etc/ssh/sshd_config
     systemctl restart sshd
 }
 
@@ -110,3 +122,5 @@ init() {
 case $1 in
     init) init $2;;
 esac
+
+setup_iptables
