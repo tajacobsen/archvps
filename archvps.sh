@@ -14,7 +14,23 @@ setup_sshd() {
 }
 
 setup_bashrc() {
-    echo "TODO bashrc for $1"
+    case $1 in
+        root) BASHRC=/root/.bashrc ;;
+        *) BASHRC=/home/$1/.bashrc ;;
+    esac
+    touch $BASHRC
+    chown $1:$1 $BASHRC
+
+cat <<EOF >> $BASHRC
+# Added by archvps script
+alias grep='grep --color=auto'
+alias ls='ls --color=auto'
+alias l='ls -alF'
+export PATH="$HOME/bin:$PATH"
+export PS1='\[\e[1;33m\][\A]\[\e[0m\] \[\e[32m\]\u\[\e[0m\]@\[\e[31m\]\h \[\e[36m\]\W\[\e[m\] \$ '
+export EDITOR=vim
+export PAGER=less
+EOF
 }
 
 setup_vimrc() {
