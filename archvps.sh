@@ -122,5 +122,3 @@ init() {
 case $1 in
     init) init $2;;
 esac
-
-setup_iptables
