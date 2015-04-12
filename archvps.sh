@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 
-MINIMAL=('vim-minimal' 'sudo' 'iptables')
+MINIMAL=('vim-minimal' 'sudo' 'iptables' 'screen')
 
 setup_iptables() {
     [ -f /etc/iptables/iptables.rules ] && cp /etc/iptables/iptables.rules{,.backup}
@@ -34,7 +34,7 @@ setup_bashrc() {
     chown $1:$1 $BASHRC
 
 cat <<EOF >> $BASHRC
-# Added by archvps script
+# Added by archvps.sh
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
 alias l='ls -alF'
@@ -54,7 +54,7 @@ setup_vimrc() {
     chown $1:$1 $VIMRC
 
 cat <<EOF >> $VIMRC
-# Added by archvps script
+" Added by archvps.sh
 set nocompatible
 syntax enable
 filetype plugin indent on
@@ -83,7 +83,8 @@ setup_screen() {
     chown $1:$1 $SCREENRC
 
 cat <<EOF >> $SCREENRC
-# Added by archvps script
+# Added by archvps.sh
+alias grep='grep --color=auto'
 hardstatus on
 hardstatus alwayslastline
 hardstatus string  "%{.BW}%-w%{.bW}[%n %t]%{-}%+w %=%{..Y} %m/%d %c"
@@ -112,7 +113,7 @@ init() {
     pacman -S --noconfirm --quiet ${MINIMAL[*]}
 
     # Add wheel group to sudoers
-    sed -i 's/#%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers
+    sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/g' /etc/sudoers
 
     # Setup services
     setup_iptables
