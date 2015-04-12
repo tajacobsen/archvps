@@ -34,21 +34,62 @@ EOF
 }
 
 setup_vimrc() {
-    echo "TODO vimrc for $1"
+    case $1 in
+        root) VIMRC=/root/.vimrc ;;
+        *) VIMRC=/home/$1/.vimrc ;;
+    esac
+    touch $VIMRC
+    chown $1:$1 $VIMRC
+
+cat <<EOF >> $VIMRC
+# Added by archvps script
+set nocompatible
+syntax enable
+filetype plugin indent on
+set autoindent
+set smartindent
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set smarttab
+set number
+set ic "ignore case in search patterns 
+set linebreak "Do not wrap in the middle of lines
+set background=dark
+set backspace=indent,eol,start
+set hlsearch "HighLightSEARCH
+EOF
 }
 
-setup_screenrc() {
-    echo "TODO screenrc for $1"
+setup_screen() {
+    case $1 in
+        root) SCREENRC=/root/.screenrc ;;
+        *) SCREENRC=/home/$1/.screenrc ;;
+    esac
+    touch $SCREENRC
+    chown $1:$1 $SCREENRC
+
+cat <<EOF >> $SCREENRC
+# Added by archvps script
+hardstatus on
+hardstatus alwayslastline
+hardstatus string  "%{.BW}%-w%{.bW}[%n %t]%{-}%+w %=%{..Y} %m/%d %c"
+startup_message off
+defscrollback 10000
+EOF
 }
 
 init() {
     # Set root password
+    echo "Set password for user root"
     passwd
     setup_bashrc root
     setup_vimrc root
 
     # Create initial user and set password
     useradd -m -G wheel $1
+    echo "Set password for user $1"
     passwd $1
     setup_bashrc $1
     setup_vimrc $1
@@ -66,5 +107,6 @@ init() {
     setup_sshd
 }
 
-#init
-
+case $1 in
+    init) init $2;;
+esac
