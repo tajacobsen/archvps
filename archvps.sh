@@ -21,6 +21,10 @@ setup_vimrc() {
     echo "TODO vimrc for $1"
 }
 
+setup_screenrc() {
+    echo "TODO screenrc for $1"
+}
+
 init() {
     # Set root password
     passwd
@@ -32,11 +36,10 @@ init() {
     passwd $1
     setup_bashrc $1
     setup_vimrc $1
+    setup_screen $1
 
-    # Update system
+    # Update system and install required packages
     pacman -Syu --noconfirm --quiet
-
-    # Install required packages
     pacman -S --noconfirm --quiet ${MINIMAL[*]}
 
     # Add wheel group to sudoers
