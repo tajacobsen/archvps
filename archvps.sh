@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 
-MINIMAL=('vim-minimal' 'sudo' 'iptables' 'screen')
+MINIMAL=('vim-minimal' 'sudo' 'iptables' 'tmux')
 
 setup_iptables() {
     [ -f /etc/iptables/iptables.rules ] && cp /etc/iptables/iptables.rules{,.backup}
@@ -106,7 +106,7 @@ init() {
     passwd $1
     setup_bashrc $1
     setup_vimrc $1
-    setup_screen $1
+    #setup_screen $1
 
     # Update system and install required packages
     pacman -Syu --noconfirm --quiet
